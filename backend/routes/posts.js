@@ -1,7 +1,6 @@
 const router = require("express").Router()
 const Post = require("../model/Post")
 
-//create post
 router.post("/", async (req, res) => {
   const newPost = new Post(req.body)
   try {
@@ -11,14 +10,7 @@ router.post("/", async (req, res) => {
     res.status(500).json(error)
   }
 })
-/* 
-{
-    "username":"admin",
-    "title":"test5",
-    "desc":"loreme2"
-} */
 
-// update post
 router.put("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
@@ -36,33 +28,32 @@ router.put("/:id", async (req, res) => {
         res.status(500).json(error)
       }
     } else {
-      res.status(401).json("You can update only your post!")
+      res.status(401).json("Puedes actualizar solo tu post!")
     }
   } catch (error) {
     res.status(500).json(error)
   }
 })
 
-// delete
+
 router.delete("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
     if (post.username === req.body.username) {
       try {
         await post.delete()
-        res.status(200).json("Post Has been delete!")
+        res.status(200).json("Post Eliminado")
       } catch (error) {
         res.status(500).json(error)
       }
     } else {
-      res.status(401).json("You can delete only your post!")
+      res.status(401).json("Puedes eleiminar solo tu post!")
     }
   } catch (error) {
     res.status(500).json(error)
   }
 })
 
-// get post
 router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
@@ -72,7 +63,7 @@ router.get("/:id", async (req, res) => {
   }
 })
 
-// get all post
+
 router.get("/", async (req, res) => {
   const username = req.query.user
   const catName = req.query.cat
@@ -95,6 +86,5 @@ router.get("/", async (req, res) => {
   }
 })
 
-//localhost:5000/posts?user=ram
 
 module.exports = router

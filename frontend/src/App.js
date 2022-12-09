@@ -11,7 +11,10 @@ import { Create } from "./components/create/Create"
 import { Context } from "./context/Context"
 
 const App = () => {
-  //after login
+  /**
+   * EN ESTE COMPONENTE CARGAMOS NUESTRO SISTEMA DE RUTAS
+   * Y TODAS LAS RUTAS QUE NECESITAMOS PARA NUESTRO PROYECTO
+   */
   const { user } = useContext(Context)
   return (
     <>

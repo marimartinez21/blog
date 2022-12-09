@@ -5,26 +5,41 @@ import { IoIosAddCircleOutline } from "react-icons/io"
 import axios from "axios"
 
 export const Account = () => {
+  /**
+   * HACEMOS USO DE NUESTRO CONTEXTO PARA OBTENER INFORMACION
+   * DEL USUARIO AUTENTIFICADO
+   * Y REALIZAR ALGUNOS CAMBIOS.
+   */
   const { user, dispatch } = useContext(Context)
 
-  // same from create file
+  /**
+   * NUESTRAS VARIABLES QUE NOS SERVIRAN DE LA SIGUIENTE MANERA:
+   * [FILE, SETFILE]: ESTA EN NULL PORQUE AQUI CARGAREMOS LA IMAGEN A SUBIR.
+   * [USERNAME, SETUSERNAME]: GUARDAMOS EL USUARIO AUTENTIFICADO  PARA LUEGO USARLO 
+   * [EMAIL, SETEMAIL]: GUARDAMOS EL EMAIL AUTENTIFICADO  PARA LUEGO USARLO 
+   * [PASSWORD, SETPASSWORD]: GUARDAMOS LA CONTRASEÑA AUTENTIFICADO  PARA LUEGO USARLO 
+   * [SUCC, SETSUCC]: NO SIRVE DE BANDERA PARA SABER SI VAMOS A GUARDAR O ACTUALIZAR
+   */
   const [file, setFile] = useState(null)
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [succ, setSucc] = useState(false)
   const PublicFlo = "http://localhost:5000/images/"
-
+  // METODO PARA REALIZAR EL EVENTO SUBMIT DE NUESTRO FORMULARIO
   const handleSubmit = async (e) => {
+    // CUANDO HAGA SUBMIT SE CAPTURA EL EVENTO EN ESTE MENTODO
     e.preventDefault()
+    // VIENE DE NUESTRO CONTEXTO PARA REALIZAR EL UPDATE
     dispatch({ type: "UPDATE_START" })
+    // OBJETO A ENVIAR PARA ACTUALIZAR
     const updateUser = {
       userId: user._id,
       username,
       email,
       password,
     }
-
+    // VALIDAMOS SI HAY ARCHIVOS PARA SUBILOS
     if (file) {
       const data = new FormData()
       const filename = Date.now() + file.name
@@ -38,6 +53,7 @@ export const Account = () => {
         console.log(error)
       }
     }
+    // REALIZAMOS PROCESO DE ACTUALIZAR EL CONTENIDO
     try {
       const res = await axios.put("/users/" + user._id, updateUser)
       setSucc(true)
@@ -51,7 +67,7 @@ export const Account = () => {
     <>
       <section className='accountInfo'>
         <div className='container boxItems'>
-          <h1>Account Information</h1>
+          <h1>Información de cuenta</h1>
           <div className='content'>
             <div className='left'>
               <div className='img flexCenter'>
@@ -63,16 +79,16 @@ export const Account = () => {
               </div>
             </div>
             <form className='right' onSubmit={handleSubmit}>
-              <label htmlFor=''>Username</label>
+              <label htmlFor=''>Nombre de usuario</label>
               <input type='text' placeholder={user.username} onChange={(e) => setUsername(e.target.value)} />
               <label htmlFor=''>Email</label>
               <input type='email' placeholder={user.email} onChange={(e) => setEmail(e.target.value)} />
-              <label htmlFor=''>Password</label>
+              <label htmlFor=''>Contraseña</label>
               <input type='password' onChange={(e) => setPassword(e.target.value)} />
               <button className='button' type='submit'>
                 Update
               </button>
-              {succ && <span>Profile is Updated</span>}
+              {succ && <span>Perfil actualizado</span>}
             </form>
           </div>
         </div>

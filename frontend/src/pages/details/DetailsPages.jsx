@@ -10,48 +10,52 @@ import { AiOutlineDelete } from "react-icons/ai"
 import { Context } from "../../context/Context"
 
 export const DetailsPages = () => {
+  // PARA SABER LA RUTA DONDE NOS ENCONTRAMOS
   const location = useLocation()
   console.log(location)
+  // PARA OBTENER EL NOMBRE DE LA RUTA DEL URL ACTUAL
   const path = location.pathname.split("/")[2]
 
-  // step 4 for update
+  // sNOS SERVIRAN PARA ACTUIALIZAR LOS CAMPOS DEL POST
   const [title, setTitle] = useState("")
   const [desc, setDesc] = useState("")
   const [update, setUpdate] = useState(false)
 
-  //setp 2
+  // SI EXISTEN ALGUN DATO REGISTRADO POR EL USUARIO
   const [post, setPost] = useState({})
+  // CUANDO CARGUE LA PAGINA SE VA A CARGAR EL POR A EDITAR O MOSTRARLO
   useEffect(() => {
     const getPost = async () => {
       const res = await axios.get("/posts/" + path)
       console.log(res)
-      //setp 2
+      // CARGAMOS NUESTRO POSTS
       setPost(res.data)
-      //setp 4
+      // ALOJAMOS ESTO PARA MOSTRARLOS EN LOS INPUTS CORRESPONDIENTES
       setTitle(res.data.title)
       setDesc(res.data.desc)
     }
+    // CARGAMOS EL METODO CREADO EN ESTE USEFFECT
     getPost()
   }, [path])
 
-  // step 3
-  // file create garne time add garne
+
+  //  RUTA DE LAS IMAGENES LOCALES FGUARDAR
   const PublicFlo = "http://localhost:5000/images/"
   const { user } = useContext(Context)
-
+  // METODO QUE ENVIA LOS DATOS PARA ELIMINAR UN POST A NUESTRA API DEL BACKEND
   const handleDelete = async () => {
     try {
       await axios.delete(`/posts/${post._id}`, { data: { username: user.username } })
       window.location.replace("/")
-    } catch (error) {}
+    } catch (error) { }
   }
 
-  // setp 4
+  // METODO NOS SERVIRA PARA EDITAR NUESTRO POST POR MEDIO DE LA API PARA ACTUALIZAR EN NUESTRO BACKEND
   const handleUpdate = async () => {
     try {
       await axios.put(`/posts/${post._id}`, { username: user.username, title, desc })
       window.location.reload()
-    } catch (error) {}
+    } catch (error) { }
   }
 
   return (
@@ -70,7 +74,7 @@ export const DetailsPages = () => {
                 </button>
                 {update && (
                   <button className='button' onClick={handleUpdate}>
-                    Update
+                    Actualizar
                   </button>
                 )}
               </div>
@@ -80,7 +84,7 @@ export const DetailsPages = () => {
             {update ? <textarea value={desc} cols='30' rows='10' className='updateInput' onChange={(e) => setDesc(e.target.value)}></textarea> : <p>{post.desc}</p>}
 
             <p>
-              Author: <Link to={`/?user=${post.username}`}>{post.username}</Link>
+              Autor: <Link to={`/?user=${post.username}`}>{post.username}</Link>
             </p>
           </div>
         </div>
